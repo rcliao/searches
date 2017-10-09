@@ -6,8 +6,8 @@ type AdjacencyList struct {
 }
 
 // NewAdjacencyList is a constructor pattern for adjacency list graph
-func NewAdjacencyList() AdjacencyList {
-	return AdjacencyList{
+func NewAdjacencyList() *AdjacencyList {
+	return &AdjacencyList{
 		data: make(map[Node][]Edge),
 	}
 }
