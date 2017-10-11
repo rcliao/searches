@@ -12,6 +12,9 @@ func NewAdjacencyList() *AdjacencyList {
 	}
 }
 
+// Len return number of nodes in graph
+func (g *AdjacencyList) Len() int { return len(g.data) }
+
 // Adjacent checks if n1 and n2 are adjacent(connected)
 func (g *AdjacencyList) Adjacent(n1 Node, n2 Node) bool {
 	if !g.checkNodeExist(n1) || !g.checkNodeExist(n2) {

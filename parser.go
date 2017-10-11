@@ -55,20 +55,20 @@ func ParseGridFile(filepath string) (Graph, error) {
 func getNeighbors(tiles [][]Tile, x, y int) []Tile {
 	neighbors := []Tile{}
 	// N
-	if y-1 >= 0 && tiles[x][y-1].Symbol != wallTileSymbol {
-		neighbors = append(neighbors, tiles[x][y-1])
-	}
-	// E
-	if x+1 < len(tiles) && tiles[x+1][y].Symbol != wallTileSymbol {
-		neighbors = append(neighbors, tiles[x+1][y])
-	}
-	// W
 	if x-1 >= 0 && tiles[x-1][y].Symbol != wallTileSymbol {
 		neighbors = append(neighbors, tiles[x-1][y])
 	}
-	// S
+	// E
 	if y+1 < len(tiles[0]) && tiles[x][y+1].Symbol != wallTileSymbol {
 		neighbors = append(neighbors, tiles[x][y+1])
+	}
+	// W
+	if y-1 >= 0 && tiles[x][y-1].Symbol != wallTileSymbol {
+		neighbors = append(neighbors, tiles[x][y-1])
+	}
+	// S
+	if x+1 < len(tiles) && tiles[x+1][y].Symbol != wallTileSymbol {
+		neighbors = append(neighbors, tiles[x+1][y])
 	}
 	return neighbors
 }
