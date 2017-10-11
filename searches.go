@@ -1,6 +1,9 @@
 package searches
 
-import "math"
+import (
+	"container/heap"
+	"math"
+)
 
 // Tile represent a single tile in the grid based game
 type Tile struct {
@@ -38,20 +41,22 @@ type Search func(graph Graph, fromNode Node, toNode Node) []Edge
 // AStar is A* search using Graph data structure
 func AStar(graph Graph, fromNode Node, toNode Node) []Edge {
 	edges := []Edge{}
-	frontier := make(PriorityQueue, graph.Len())
+	// start with one item inside
+	frontier := make(PriorityQueue, 1)
 	parents := make(map[Node]Node)
 	distances := make(map[Node]float64)
 
-	frontier.Push(&Item{
+	frontier[0] = &Item{
 		value:    fromNode,
 		priority: 0,
-		index:    0,
-	})
+	}
+	heap.Init(&frontier)
+
 	parents[fromNode] = Node{}
 	distances[fromNode] = 0
 
 	for frontier.Len() > 0 {
-		current := frontier.Pop().(*Item).value
+		current := heap.Pop(&frontier).(*Item).value
 
 		if current == toNode {
 			// found solution
@@ -60,12 +65,14 @@ func AStar(graph Graph, fromNode Node, toNode Node) []Edge {
 
 		for _, n := range graph.Neighbors(current) {
 			newCost := distances[current] + 1
-			if _, okay := distances[n]; !okay || distances[n] > newCost {
-				priority := (float64(newCost) + heuristic(n, toNode)) * -1
-				frontier.Push(&Item{
+			if _, okay := distances[n]; !okay || newCost < distances[n] {
+				priority := float64(newCost) + heuristic(n, toNode)
+				if frontier.Contains(n) {
+					continue
+				}
+				heap.Push(&frontier, &Item{
 					value:    n,
 					priority: priority,
-					index:    frontier.Len(),
 				})
 				distances[n] = newCost
 				parents[n] = current
@@ -102,7 +109,7 @@ func reverse(ss []Edge) {
 }
 
 func heuristic(node, goal Node) float64 {
-	dx := math.Abs(float64(node.Data.X - goal.Data.X))
-	dy := math.Abs(float64(node.Data.Y - goal.Data.Y))
-	return 1 * math.Sqrt(dx*dx+dy*dy)
+	dx := math.Abs(float64(goal.Data.X - node.Data.X))
+	dy := math.Abs(float64(goal.Data.Y - node.Data.Y))
+	return 1 * math.Sqrt((dx*dx)+(dy*dy))
 }

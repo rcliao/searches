@@ -26,6 +26,6 @@ func main() {
 	fmt.Println(searches.ConvertEdgesIntoActions(searches.AStar(
 		g,
 		searches.Node{searches.Tile{3, 0, "@1"}},
-		searches.Node{searches.Tile{4, 4, "@6"}},
+		searches.Node{searches.Tile{4, 4, "@8"}},
 	)))
 }
